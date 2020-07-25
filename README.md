@@ -1,2 +1,8 @@
 # MyScript
-This repo, created keep my dynamic script in All Programming Language
+This repo, created to keep my script in All Programming Language
+It's Like
+- Creativity
+- Trick
+- Dynamic
+- Hobby
+- Others
