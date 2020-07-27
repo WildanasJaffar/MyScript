@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>App</title>
+</head>
+<link rel="stylesheet" href="bootstrap-4.5.0-dist/css/bootstrap.css">
+<body>
+	<div id="app" class="p-3">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-6">
+						<h3>Property: {{ sum_of_property }}</h3>
+					</div>
+					<div class="col-md-6 text-right">
+						<button class="btn btn-primary" v-on:click="open_modal('C', 'property')" title="Add Record">Add</button>
+					</div>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-bordered">
+						<thead class="bg-success text-white">
+							<tr>
+								<th>Data</th>
+								<th>IDR</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="item in property">
+								<td>{{ item.name }}</td>
+								<td class="text-right">{{ item.mny }}</td>
+								<td class="text-center">
+									<button class="btn btn-warning" v-on:click="open_modal('U', 'property'); select_item(item);">Edit</button>
+									<button class="btn btn-danger" v-on:click="open_modal('D', 'property'); select_item(item);">Delete</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-6">
+						<h3>Debt: {{ sum_of_debt }}</h3>
+					</div>
+					<div class="col-md-6 text-right">
+						<button class="btn btn-primary" v-on:click="open_modal('C', 'debt')" title="Add Record">Add</button>
+					</div>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-bordered">
+						<thead class="bg-info text-white">
+							<tr>
+								<th>Data</th>
+								<th>IDR</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="item in debt">
+								<td>{{ item.name }}</td>
+								<td class="text-right">{{ item.mny }}</td>
+								<td class="text-center">
+									<button class="btn btn-warning" v-on:click="open_modal('U', 'debt'); select_item(item);">Edit</button>
+									<button class="btn btn-danger" v-on:click="open_modal('D', 'debt'); select_item(item);">Delete</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>	
+			</div>
+		</div>
+		<p class="mb-3"></p>
+		<div class="row">
+			<div class="col-md-12">
+				<button class="btn btn-info" v-on:click="generate_solution">Generate Solution</button>
+			</div>
+		</div>
+		<div class="row" v-show="is_show_solution">
+			<div class="col-md-12">
+				<h3>You can pay all of your debt {{ value_of_percent }}%, {{ sum_of_solution }} {{ (minus_of_solution > 0) ? ', -' + minus_of_solution : '' }}</h3>
+				<div class="table-responsive">
+					<table class="table table-bordered">
+						<thead class="bg-info text-white">
+							<tr>
+								<th>Data</th>
+								<th>IDR</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="item in solution">
+								<td>{{ item.name }}</td>
+								<td class="text-right">{{ item.mny }}</td>
+								<td class="text-center">
+									<button class="btn btn-warning" v-on:click="open_modal('U', 'solution'); select_item(item);">Edit</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>	
+			</div>
+		</div>
+
+		<!-- Modal -->
+		<div class="modal fade" :id="modal1.id" tabindex="-1" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">{{ modal1.title }}</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div :class="'alert alert-dismissible fade show alert-' + alert.type" role="alert" style="display: none;">
+						  	<b>{{ alert.title }}!</b> {{ alert.message }}
+						  	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						  		<span aria-hidden="true">&times;</span>
+						  	</button>
+						</div>
+						<div v-if="condition != 'D'">
+							<div class="form-group">
+								<label>Name</label>
+								<input type="text" ref="name" class="form-control" v-model="data.name" v-on:keyup.enter="f_crud">
+							</div>
+							<div class="form-group">
+								<label>Money</label>
+								<input type="number" class="form-control" v-model="data.mny" v-on:keyup.enter="f_crud">
+							</div>
+						</div>
+						<div v-else-if="show_button_cu">
+							Are you sure? You can't revert your Action
+						</div>
+					</div>
+					<div class="modal-footer" v-if="show_button_cu">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+						<button type="button" :class="'btn btn-' + (condition == 'D' ? 'danger' : 'primary') + (disabled ? ' disabled' : '')" v-on:click="f_crud">{{ condition == 'D' ? 'Delete' : 'Submit' }}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script src="jquery-3.3.1.min.js" type="text/javascript"></script>
+<script src="bootstrap-4.5.0-dist/js/bootstrap.js" type="text/javascript"></script>
+<script src="vue.js"></script>
+<script>
+	var app = new Vue({
+		el: '#app',
+		data: {
+			judul: 'App',
+			alert: {
+				type: 'success',
+				title: '',
+				message: ''
+			},
+			disabled: false,
+			debt: [],
+			property: [],
+			solution: [],
+			condition: 'C',
+			type: 'property',
+			data: {
+				id: 0,
+				name: '',
+				mny: 0
+			},
+			modal1: {
+				id: 'modal-crud',
+				title: 'Add'
+			},
+			sum_of_property: 0,
+			sum_of_debt: 0,
+			sum_of_solution: 0,
+			value_of_percent: 0,
+			minus_of_solution: 0,
+			is_show_solution: false,
+			show_button_cu: true
+		}, 
+		created(){
+			console.log('created, nama: ');
+		}, 
+		methods: {
+			clear_data(){
+				this.show_button_cu = true;
+				this.data = {
+					id: 0,
+					name: '',
+					mny: 0
+				};
+				this.$refs.name.focus();
+			},
+			select_item(item){
+				this.data.id = item.id;
+				this.data.name = item.name;
+				this.data.mny = item.mny;
+			},
+			open_modal(condition, type){
+				this.condition = condition;
+				this.type = type;
+				$('.alert').fadeOut();
+				if (condition == 'C') { 
+					this.clear_data();
+					this.modal1.title = 'Add ' + type; 
+				} else if (condition == 'U') {
+					this.modal1.title = 'Edit ' + type;
+				} else {
+					this.modal1.title = 'Delete ' + type;
+				}
+
+				$('#' + this.modal1.id).modal('toggle');
+			},
+			f_crud(){
+				if (!this.data.name) this.show_alert('info', 'Info!', 'Field Name was required!');
+				else if (this.type == 'property') this.f_property();
+				else if (this.type == 'debt') this.f_debt();
+				else this.f_solution();
+			},
+			f_property(){
+				var name = this.data.name;
+				var mny = this.data.mny;
+				var id = this.data.id;
+
+				this.is_show_solution = false;
+				if (this.condition == 'C'){
+					var id = this.property.length + 1;
+					this.property.push({ id: id, name: name, mny: mny });
+					this.clear_data();
+					this.sum_of_property += parseInt(mny);
+				} else if (this.condition == 'U' || this.condition == 'D'){
+					this.sum_of_property = this.condition == 'U' ? 0 : this.sum_of_property;
+					for (var i = 0; i < this.property.length; i++){
+						if (this.condition == 'U'){
+							if (this.property[i].id == id){
+								this.property[i].name = name;
+								this.property[i].mny = mny;
+							}
+							this.sum_of_property += parseInt(this.property[i].mny);
+						} else if (this.property[i].id == id && this.condition == 'D'){
+							this.sum_of_property = parseInt(this.sum_of_property) - parseInt(this.property[i].mny);
+							this.property.splice(i, 1);
+							this.show_button_cu = false;
+						}
+					}
+				}
+				this.show_alert('success', 'Success', '');
+			},
+			f_debt(){
+				var name = this.data.name;
+				var mny = this.data.mny;
+				var id = this.data.id;
+
+				this.is_show_solution = false;
+				if (this.condition == 'C'){
+					var id = this.debt.length + 1;
+					this.debt.push({ id: id, name: name, mny: mny });
+					this.clear_data();
+					this.sum_of_debt += parseInt(mny);
+				} else if (this.condition == 'U' || this.condition == 'D'){
+					this.sum_of_debt = this.condition == 'U' ? 0 : this.sum_of_debt;
+					for (var i = 0; i < this.debt.length; i++){
+						if (this.condition == 'U'){
+							if (this.debt[i].id == id){
+								this.debt[i].name = name;
+								this.debt[i].mny = mny;	
+							}
+							this.sum_of_debt += parseInt(this.debt[i].mny);
+						} else if (this.debt[i].id == id && this.condition == 'D'){
+							this.sum_of_debt = parseInt(this.sum_of_debt) - parseInt(this.debt[i].mny);
+							this.debt.splice(i, 1);
+							this.show_button_cu = false;
+						}
+					}
+				}
+				this.show_alert('success', 'Success', '');
+			},
+			show_alert(type, title, message){
+				this.alert.type = type;
+				this.alert.title = title;
+				this.alert.message = message;
+				$('.alert').fadeIn();
+				$('.alert').delay(3000).fadeOut();
+			},
+			generate_solution(){
+				this.is_show_solution = false;
+				if (this.sum_of_debt == 0){
+					alert("You haven't debt");
+				} else if (this.sum_of_property == 0){
+					alert("You haven't property");
+				} else if (this.sum_of_debt > this.sum_of_property){
+					this.condition = 'C';
+					this.solution = [];
+					this.f_solution();
+				} else {
+					alert("Your Property is enough to pay all of your debt");
+				}
+			},
+			f_solution(){
+				var name = this.data.name;
+				var mny = this.data.mny;
+				var id = this.data.id;
+
+				this.is_show_solution = true;
+				this.minus_of_solution = 0;
+				this.sum_of_solution = this.condition == 'D' ? this.sum_of_solution : 0;
+				var one_percent_of_debt = this.sum_of_debt / 100;
+				this.value_of_percent = Math.floor(this.sum_of_property / one_percent_of_debt);
+				for (var i = 0; i < this.debt.length; i++){			
+					if (this.condition == 'C'){
+						var mny = this.debt[i].mny * this.value_of_percent / 100;
+						this.sum_of_solution += parseInt(mny);
+						this.solution.push({
+							id: i, name: this.debt[i].name, mny: mny
+						});
+					} else if (this.condition == 'U'){
+						if (this.solution[i].id == id){
+							this.solution[i].name = name;
+							this.solution[i].mny = mny;
+						}
+						this.sum_of_solution += parseInt(this.solution[i].mny);
+						this.show_alert('success', 'Success', '');
+					}
+				}
+
+				if (this.sum_of_solution > this.sum_of_property){
+					this.minus_of_solution = this.sum_of_solution - this.sum_of_property;
+				}
+			}
+		}
+	});
+</script>
+</html>
