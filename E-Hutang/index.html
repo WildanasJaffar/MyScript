@@ -78,7 +78,7 @@
 		</div>
 		<div class="row" v-show="is_show_solution">
 			<div class="col-md-12">
-				<h3>You can pay all of your debt {{ value_of_percent }}%, {{ format_duit(sum_of_solution) }} {{ (minus_of_solution > 0) ? ', -' + minus_of_solution : '' }}</h3>
+				<h3>You can pay all of your debt {{ value_of_percent }}%, {{ format_duit(sum_of_solution) }} <span class="text-danger">{{ (minus_of_solution > 0) ? '( -' + format_duit(minus_of_solution) + ' )' : '' }}</span></h3>
 				<div class="table-responsive">
 					<table class="table table-bordered">
 						<thead class="bg-info text-white">
