@@ -85,6 +85,12 @@ function next_prev_tab(type) {
         }
 
         if ((condition_prev || condition_next) && is_show) {
+            if (temp_show_li.length > 0) {
+                if (!(temp_show_li[temp_show_li.length - 1] == (idx - 1))) {
+                    return false;
+                }
+            }
+
             temp_show_li.push(idx);
             width_li += li_width;
             $(this).show();
