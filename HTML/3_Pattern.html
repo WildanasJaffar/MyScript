@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+</head>
+
+<body>
+    <pre id="pattern1">
+        *
+        **
+        ***
+        ****
+        *****
+        ******
+    </pre>
+    <pre id="pattern2">
+        ******
+        *****
+        ****
+        ***
+        **
+        *
+    </pre>
+    <pre id="pattern3">
+        ******
+        ******
+        ******
+        ******
+        ******
+        ******
+    </pre>
+    <pre id="pattern4">
+            *
+           **
+          ***
+         ****
+        *****
+       ******
+   </pre>
+    <pre id="pattern5">
+       ******
+        *****
+         ****
+          ***
+           **
+            *
+   </pre>
+</body>
+<script src="js/jquery-3.3.1.min.js" type="text/javascript"></script>
+<script>
+    var pattern = '*';
+
+    function get_count() {
+        return 6;
+    }
+
+    function gen_pattern1() {
+        $('#pattern1').empty();
+        var hpattern = '';
+        for (var i = 0; i < get_count(); i++) {
+            for (var j = 0; j < i; j++) {
+                hpattern += pattern;
+            }
+
+            hpattern += '\n';
+        }
+
+        $('#pattern1').append(hpattern);
+    }
+
+    function gen_pattern2() {
+        $('#pattern2').empty();
+        var hpattern = '';
+        for (var i = 0; i < get_count(); i++) {
+            for (var j = get_count() - 1; j > i; j--) {
+                hpattern += pattern;
+            }
+
+            hpattern += '\n';
+        }
+
+        $('#pattern2').append(hpattern);
+    }
+
+    function gen_pattern3() {
+        $('#pattern3').empty();
+        var hpattern = '';
+        for (var i = 0; i < get_count(); i++) {
+            for (var j = get_count() - 1; j > 0; j--) {
+                hpattern += pattern;
+            }
+
+            hpattern += '\n';
+        }
+
+        $('#pattern3').append(hpattern);
+    }
+
+    function gen_pattern4() {
+        $('#pattern4').empty();
+        var hpattern = '';
+        for (var i = 0; i < get_count(); i++) {
+            for (var j = get_count() - 1; j > 0; j--) {
+                if (j <= i) {
+                    hpattern += pattern;
+                } else {
+                    hpattern += ' ';
+                }
+            }
+
+            hpattern += '\n';
+        }
+
+        $('#pattern4').append(hpattern);
+    }
+
+    function gen_pattern5() {
+        $('#pattern5').empty();
+        var hpattern = '';
+        for (var i = 0; i < get_count(); i++) {
+            for (var j = 0; j > get_count(); j++) {
+                if (j > i) {
+                    hpattern += pattern;
+                } else {
+                    hpattern += ' ';
+                }
+            }
+
+            hpattern += '\n';
+        }
+
+        $('#pattern5').append(hpattern);
+    }
+
+    gen_pattern1();
+    gen_pattern2();
+    gen_pattern3();
+    gen_pattern4();
+    gen_pattern5();
+</script>
+
+</html>

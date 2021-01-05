@@ -574,7 +574,15 @@ if (typeof jQuery === 'undefined') {
             if (!is_valid) return false;
 
             var result = settings.onAjax(action, serialize, data);
-            if (result === false) return false;
+
+            if (typeof result === "object") {
+                if (result.type === false) return false;
+
+                serialize = result.serialize;
+            } else {
+                if (result === false) return false;
+            }
+
 
             var jqXHR = $.post(settings.url, serialize, function (data, textStatus, jqXHR) {
                 if (action === settings.buttons.edit.action) {

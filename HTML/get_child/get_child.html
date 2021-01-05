@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+    <pre id="res"></pre>
+</body>
+<script>
+    var data = [
+        { "name": "", "title": "MABES TNI", "className": "", "satker_name": "MABES TNI" },
+        { "name": "ITJEN TNI", "title": "ITJEN TNI", "className": "terima", "satker_name": "MABES TNI" },
+        { "name": "KAPUSKES TNI", "title": "KAPUSKES TNI", "className": "terima", "satker_name": "MABES TNI" },
+        { "name": "KABABEK TNI", "title": "KABABEK TNI", "className": "terima", "satker_name": "MABES TNI" },
+
+        { "name": "", "title": "MABES TNI 2", "className": "", "satker_name": "MABES TNI 2" },
+        { "name": "ITJEN TNI 1", "title": "ITJEN TNI", "className": "terima", "satker_name": "MABES TNI 2" },
+        { "name": "ITJEN TNI 1.1", "title": "ITJEN TNI 1", "className": "terima1", "satker_name": "ITJEN TNI 1" },
+        { "name": "ITJEN TNI 1.2", "title": "ITJEN TNI 1", "className": "terima1", "satker_name": "ITJEN TNI 1" },
+        { "name": "ITJEN TNI 1.1.1", "title": "ITJEN TNI 1.1", "className": "terima11", "satker_name": "ITJEN TNI 1.1" },
+        { "name": "KAPUSKES TNI 1", "title": "KAPUSKES TNI", "className": "terima", "satker_name": "MABES TNI 2" },
+        { "name": "KABABEK TNI 1", "title": "KABABEK TNI", "className": "terima", "satker_name": "MABES TNI 2" }
+    ]
+
+    var tree_data = [];
+    // get parent
+    for (var i = 0; i < data.length; i++) {
+        if (!data[i].name) {
+            tree_data.push({
+                name: data[i].satker_name,
+                title: data[i].title,
+                children: get_child(data[i].satker_name)
+            })
+        }
+    }
+
+    function get_child(parent_id) {
+        var temp = [];
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].satker_name == parent_id && data[i].name) {
+                temp.push({
+                    name: data[i].name,
+                    title: data[i].title,
+                    className: data[i].className,
+                    children: get_child(data[i].name)
+                })
+            }
+        }
+
+        return temp;
+    }
+
+    document.getElementById("res").textContent = JSON.stringify(tree_data, undefined, 2);
+</script>
+
+</html>
