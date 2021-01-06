@@ -4,11 +4,13 @@
     <br />
     <h1>Not Found</h1>
     <br />
-    <nav>
-      <router-link to="/home">
-        <i class="la la-home"></i>
-        Take me back
-      </router-link>
-    </nav>
+    <ul class="nav">
+      <li>
+        <router-link to="/home">
+          <i class="la la-home"></i>
+          Take me back
+        </router-link>
+      </li>
+    </ul>
   </div>
 </template>

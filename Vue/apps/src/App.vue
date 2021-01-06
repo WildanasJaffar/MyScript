@@ -53,19 +53,23 @@ export default {
   opacity: 0;
 }
 
-nav a {
-  text-decoration: none;
-  margin: 0 5px;
-  padding: 4px 8px;
-  border-radius: 5px;
-  color: black;
+ul.nav > li {
+  display: inline;
 }
 
-nav a:active {
+.nav li a {
+  text-decoration: none;
+  border-radius: 5px;
+  color: black;
+  padding: 4px 8px;
+  margin: 0 5px;
+}
+
+.nav li a:active {
   background-color: #a9a7a7;
 }
 
-nav a:hover {
+.nav li a:hover {
   background-color: #d3d3d3;
 }
 
