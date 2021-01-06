@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jan 05, 2021 at 05:39 AM
+-- Generation Time: Jan 06, 2021 at 05:17 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.4.7
 
@@ -96,7 +96,36 @@ INSERT INTO `logs` (`log_id`, `log_msg`, `log_date`) VALUES
 (61, 'admin telah login', '2021-01-05 04:25:23'),
 (62, 'admin telah logout', '2021-01-05 04:31:58'),
 (63, 'admin telah login', '2021-01-05 04:32:01'),
-(64, 'admin telah logout', '2021-01-05 04:32:05');
+(64, 'admin telah logout', '2021-01-05 04:32:05'),
+(65, 'admin telah login', '2021-01-05 05:52:17'),
+(66, 'admin telah logout', '2021-01-05 05:52:21'),
+(67, 'admin telah login', '2021-01-06 02:46:08'),
+(68, 'admin telah logout', '2021-01-06 03:22:36'),
+(69, 'admin telah login', '2021-01-06 03:24:32'),
+(70, 'admin telah logout', '2021-01-06 03:24:39'),
+(71, 'admin telah login', '2021-01-06 03:26:49'),
+(72, 'admin telah logout', '2021-01-06 03:27:14'),
+(73, 'admin telah login', '2021-01-06 03:27:17'),
+(74, 'admin telah logout', '2021-01-06 03:51:58'),
+(75, 'admin telah login', '2021-01-06 03:52:04'),
+(76, 'admin telah logout', '2021-01-06 03:52:07'),
+(77, 'admin telah login', '2021-01-06 03:52:10'),
+(78, 'admin telah logout', '2021-01-06 03:53:07'),
+(79, 'admin telah login', '2021-01-06 03:54:44'),
+(80, 'admin telah logout', '2021-01-06 03:54:50'),
+(81, 'admin telah login', '2021-01-06 03:58:36'),
+(82, 'admin telah logout', '2021-01-06 04:10:22'),
+(83, 'admin telah login', '2021-01-06 04:10:26'),
+(84, 'admin telah logout', '2021-01-06 04:10:28'),
+(85, 'admin telah login', '2021-01-06 04:10:45'),
+(86, 'admin telah logout', '2021-01-06 04:11:25'),
+(87, 'admin telah login', '2021-01-06 04:16:52'),
+(88, 'admin telah logout', '2021-01-06 04:16:54'),
+(89, 'admin telah login', '2021-01-06 04:17:09'),
+(90, 'admin telah logout', '2021-01-06 04:17:12'),
+(91, 'admin telah login', '2021-01-06 04:18:52'),
+(92, 'admin telah logout', '2021-01-06 04:28:45'),
+(93, 'admin telah login', '2021-01-06 04:28:48');
 
 -- --------------------------------------------------------
 
@@ -107,16 +136,22 @@ INSERT INTO `logs` (`log_id`, `log_msg`, `log_date`) VALUES
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` varchar(150) NOT NULL,
-  `password` varchar(250) NOT NULL
+  `password` varchar(250) NOT NULL,
+  `user_fullname` varchar(64) DEFAULT NULL,
+  `user_funfact` varchar(256) DEFAULT NULL,
+  `created_by` varchar(32) NOT NULL,
+  `created_date` date NOT NULL,
+  `updated_by` varchar(32) NOT NULL,
+  `updated_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`) VALUES
-(1, 'admin', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220'),
-(2, 'admin1', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220');
+INSERT INTO `users` (`id`, `username`, `password`, `user_fullname`, `user_funfact`, `created_by`, `created_date`, `updated_by`, `updated_date`) VALUES
+(1, 'admin', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Admin', 'First User :D', 'admin', '2020-12-01', 'admin', '2020-12-01'),
+(2, 'admin1', '7110eda4d09e062aa5e4a390b0a572ac0d2c0220', 'Admin 1', 'Second User :)', 'admin', '2020-12-01', 'admin', '2020-12-01');
 
 --
 -- Indexes for dumped tables
@@ -143,7 +178,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `users`
