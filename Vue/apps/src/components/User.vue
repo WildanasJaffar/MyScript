@@ -4,14 +4,16 @@
       <i class="las la-user-circle"></i>
       User {{ id }}
     </h1>
-    <h2 v-show="data.id == 0">
+    <h2 v-show="datas.length == 0">
       Loading ...
       <i class="las la-atom la-spin"></i>
     </h2>
-    <p v-show="data.id != 0">
-      {{ data.name }} ( {{ data.email }} )
+    <p v-show="datas.length > 0" v-for="row in datas" v-bind:key="row.id">
+      {{ row.user_fullname }} ( {{ row.username }} )
       <br />
-      - {{ data.fact }}
+      - {{ row.user_funfact }}
+      <br />
+      - Updated: {{ row.updated_by }} - {{ row.updated_date }}
     </p>
   </div>
 </template>
@@ -20,11 +22,7 @@ export default {
   props: ["id"],
   data() {
     return {
-      data: {
-        id: 0,
-        name: "",
-        email: ""
-      }
+      datas: []
     };
   },
   created() {
@@ -38,19 +36,15 @@ export default {
   methods: {
     users(id) {
       let self = this;
-      self.data = {
-        id: 0,
-        name: "",
-        email: ""
-      };
+      self.datas = [];
 
       this.axios({
-        url: `${this.rest_url()}main/users`,
+        url: `${this.rest_url()}users`,
         method: "GET",
         params: { id: id }
       })
         .then(function(response) {
-          self.data = response.data;
+          self.datas = response.data;
         })
         .catch(function(error) {
           // handle error

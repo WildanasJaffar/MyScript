@@ -12,9 +12,11 @@ import { isLoggedIn, setRestEndPoint, getRestEndPoint, logoutUser, getAuthToken,
 router.beforeEach((to, from, next) => {
     axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
     if (!isLoggedIn() && to.path !== '/auth') {
-        if (getUserInfo()) logoutUser()
-
-        next({ name: 'Login' })
+        if (getUserInfo()) {
+            logoutUser(function () { next({ name: 'Login' }) })
+        } else {
+            next({ name: 'Login' })
+        }
     } else if (to.path !== '/auth') {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + getAuthToken();
         next()

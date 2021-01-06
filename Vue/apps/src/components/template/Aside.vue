@@ -7,6 +7,12 @@
       </router-link>
     </li>
     <li>
+      <router-link to="/users">
+        <i class="la la-user-circle"></i>
+        List User
+      </router-link>
+    </li>
+    <li>
       <router-link to="/user/1">
         <i class="la la-user-circle"></i>
         User 1
