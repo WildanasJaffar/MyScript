@@ -1,4 +1,4 @@
-# apps
+# apps - vue cli 4
 
 ## Project setup
 ```

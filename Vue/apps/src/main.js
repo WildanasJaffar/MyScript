@@ -5,6 +5,10 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { isLoggedIn, setRestEndPoint, getRestEndPoint, logoutUser, getAuthToken, setAuthToken, getUserInfo } from './components/auth/auth'
 
+// import vuetify from './plugins/vuetify' // path to vuetify export
+// import Vuetify from 'vuetify'
+// import 'vuetify/dist/vuetify.min.css'
+
 router.beforeEach((to, from, next) => {
     axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
     if (!isLoggedIn() && to.path !== '/auth') {
@@ -24,6 +28,7 @@ const app = createApp(App)
 const base_url = process.env.VUE_APP_BASE_URL + ":" + process.env.VUE_APP_PORT
 app.use(VueAxios, axios)
 app.use(router)
+// app.use(Vuetify)
 app.mixin({
     methods: {
         base_url() { return base_url },

@@ -4,6 +4,7 @@
   </div>
 </template>
 <style>
+/* Metronic - failed in js */
 /* begin::Global Theme Styles(used by all pages) */
 /* @import "../../assets/plugins/global/plugins.bundle.css";
 @import "../../assets/plugins/custom/prismjs/prismjs.bundle.css";
@@ -16,4 +17,11 @@
 @import "../../assets/css/themes/layout/brand/dark.css";
 @import "../../assets/css/themes/layout/aside/dark.css"; */
 /* end::Layout Themes */
+
+/* SmartAdmin - failed in js */
+/* base css */
+/* @import "../../assets/css/vendors.bundle.css";
+@import "../../assets/css/vendors.bundle.css";
+@import "../../assets/css/app.bundle.css";
+@import "../../assets/css/theme-demo.css"; */
 </style>
