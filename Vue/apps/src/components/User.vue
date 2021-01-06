@@ -4,11 +4,11 @@
       <i class="las la-user-circle"></i>
       User {{ id }}
     </h1>
-    <h2 v-show="datas.length == 0">
+    <h2 v-show="is_processing">
       Loading ...
       <i class="las la-atom la-spin"></i>
     </h2>
-    <p v-show="datas.length > 0" v-for="row in datas" v-bind:key="row.id">
+    <p v-show="!is_processing" v-for="row in datas" v-bind:key="row.id">
       {{ row.user_fullname }} ( {{ row.username }} )
       <br />
       - {{ row.user_funfact }}
@@ -22,10 +22,13 @@ export default {
   props: ["id"],
   data() {
     return {
+      is_processing: false,
+      url: "",
       datas: []
     };
   },
   created() {
+    this.url = this.rest_url() + "users";
     this.users(this.id);
   },
   watch: {
@@ -37,14 +40,16 @@ export default {
     users(id) {
       let self = this;
       self.datas = [];
+      self.is_processing = true;
 
       this.axios({
-        url: `${this.rest_url()}users`,
+        url: self.url,
         method: "GET",
         params: { id: id }
       })
         .then(function(response) {
           self.datas = response.data;
+          self.is_processing = false;
         })
         .catch(function(error) {
           // handle error

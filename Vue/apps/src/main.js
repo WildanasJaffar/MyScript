@@ -44,6 +44,7 @@ app.mixin({
             error = error.response
             let msg = error.data.error
             msg = msg ? msg : error.data.status
+            msg = msg ? msg : ""
             alert(error.status + " " + msg)
         }
     }

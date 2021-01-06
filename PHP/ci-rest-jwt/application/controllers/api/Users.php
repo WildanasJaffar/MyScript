@@ -21,6 +21,7 @@ class Users extends BD_Controller
         }
 
         $data = $this->M_main->get_user($where)->result_array();
-        $this->set_response($data, REST_Controller::HTTP_OK); //This is the respon if success
+        $log = $this->M_main->logs($this->user_data->username . " melihat user");
+        $this->set_response($data, REST_Controller::HTTP_OK);
     }
 }
