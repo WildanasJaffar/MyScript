@@ -28,6 +28,7 @@ if (typeof jQuery === 'undefined') {
         var wrapper = $('#' + elem_id).outerWidth();
         var wrapper2 = 0;
         var current_margin = 0;
+        var set_margin = 0;
 
         var $ul = '';
         var content = '';
@@ -53,6 +54,17 @@ if (typeof jQuery === 'undefined') {
                 }).reduce(function (a, b) { return a + b; }, 0);
                 $ul = $('.' + settings.class_content);
                 content += wrapper < content ? 50 : 0;
+
+                var enable_prev = calculate_margin('prev') != set_margin;
+                var enable_next = calculate_margin('next') != set_margin;
+                $('.' + settings.class_btn_prev + ', .' + settings.class_btn_next).addClass('disabled');
+                if (enable_prev) {
+                    $('.' + settings.class_btn_prev).removeClass('disabled');
+                }
+
+                if (enable_next) {
+                    $('.' + settings.class_btn_next).removeClass('disabled');
+                }
             }, 500);
         }
 
@@ -70,24 +82,39 @@ if (typeof jQuery === 'undefined') {
         }
 
         function next_prev_tab(type) {
-            var set_margin = 0;
+            set_margin = calculate_margin(type);
+            $ul.css({ 'margin-left': set_margin });
+
+            var enable_prev = calculate_margin('prev') != set_margin;
+            var enable_next = calculate_margin('next') != set_margin;
+
+            $('.' + settings.class_btn_prev + ', .' + settings.class_btn_next).addClass('disabled');
+            if (enable_prev) {
+                $('.' + settings.class_btn_prev).removeClass('disabled');
+            }
+
+            if (enable_next) {
+                $('.' + settings.class_btn_next).removeClass('disabled');
+            }
+        }
+
+        function calculate_margin(type) {
+            var temp = 0;
             if (type == 'next') {
                 if (-current_margin + wrapper < content) {
-                    set_margin = Math.max(current_margin - wrapper, -(content - wrapper));
+                    temp = Math.max(current_margin - wrapper, -(content - wrapper));
                 } else {
-                    set_margin = current_margin;
+                    temp = current_margin;
                 }
             } else {
                 if (current_margin < 0) {
-                    set_margin = Math.min(current_margin + wrapper, 0);
+                    temp = Math.min(current_margin + wrapper, 0);
                 } else {
-                    set_margin = current_margin;
+                    temp = current_margin;
                 }
             }
 
-            $ul.css({ 'margin-left': set_margin });
-
-            return this
+            return temp;
         }
 
         $(window).on('resize', function () { on_resize(this) });
