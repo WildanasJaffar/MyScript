@@ -1,0 +1,8 @@
+/**
+ * @description Slider Top Nav
+ * @version 1.0
+ * @author Muhammad Wildan Jaffar Rahmatullah
+ * @date 20210107
+*/
+
+[class~=scroll-nav] [class~=menu-item][class~=menu-item-hover] [class~=menu-submenu] > [class~=menu-subnav] > [class~=menu-item][class~=menu-item-hover] > [class~=menu-submenu],[class~=scroll-nav] [class~=menu-item][class~=menu-item-open-dropdown][class~=menu-item-hover] > [class~=menu-submenu]{display:block !important;}[class~=scroll-wrapper]{width:100%;}[class~=scroll-wrapper] [class~=list-menu] > li > a{white-space:nowrap;}[class~=scroll-wrapper]{overflow:hidden !important;}[class~=scroll-nav] [class~=menu-item][class~=menu-item-open-dropdown][class~=menu-item-hover] > [class~=menu-submenu]{position:fixed;}[class~=scroll-nav] > [class~=menu-item] [class~=menu-submenu]{display:none !important;}[class~=scroll-wrapper] > ul{position:relative;}[class~=scroll-wrapper] > ul{transition:margin 700ms;}[class~=scroll-nav] [class~=menu-item][class~=menu-item-open-dropdown][class~=menu-item-hover] > [class~=menu-submenu]{top:12rem;}

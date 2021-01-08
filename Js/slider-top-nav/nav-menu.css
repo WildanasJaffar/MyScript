@@ -1,0 +1,34 @@
+/**
+ * @description Slider Top Nav
+ * @version 1.0
+ * @author Muhammad Wildan Jaffar Rahmatullah
+ * @date 20210107
+*/
+
+.scroll-wrapper {
+	width: 100%;
+	overflow: hidden !important;
+}
+
+.scroll-wrapper > ul {
+	position: relative;
+	transition: margin 700ms;
+}
+
+.scroll-wrapper .list-menu > li > a {
+	white-space: nowrap;
+}
+
+.scroll-nav > .menu-item .menu-submenu {
+	display: none !important;
+}
+
+.scroll-nav .menu-item.menu-item-open-dropdown.menu-item-hover > .menu-submenu {
+	display: block !important;
+	position: fixed;
+	top: 12rem;
+}
+
+.scroll-nav .menu-item.menu-item-hover .menu-submenu > .menu-subnav > .menu-item.menu-item-hover > .menu-submenu {
+	display: block !important;
+}
