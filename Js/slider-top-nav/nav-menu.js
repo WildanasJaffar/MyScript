@@ -14,6 +14,8 @@ if (typeof jQuery === 'undefined') {
     'use strict';
 
     $.fn.SliderTopNav = function (opt) {
+        console.log('Slider Top Nav development')
+        console.log('------------------------------------------------------------------------------ Start')
         var defaults = {
             class_wrapper: 'scroll-wrapper',
             class_content: 'scroll-nav',
@@ -46,7 +48,7 @@ if (typeof jQuery === 'undefined') {
             }
 
             setTimeout(function () {
-                // get width from elem and its childrens
+                // get elem width and its children
                 wrapper = $('#' + elem_id).outerWidth();
                 wrapper2 = wrapper / 2;
                 $ul = $('.' + settings.class_content).children('li');
@@ -137,14 +139,8 @@ if (typeof jQuery === 'undefined') {
             }
         });
 
-        $('.' + settings.class_btn_prev).click(function () {
-            next_prev_tab('prev');
-        });
-
-        $('.' + settings.class_btn_next).click(function () {
-            next_prev_tab('next');
-        });
-
-        // console.log('Slider Top Nav development')
+        $('.' + settings.class_btn_prev).click(function () { next_prev_tab('prev'); });
+        $('.' + settings.class_btn_next).click(function () { next_prev_tab('next'); });
+        console.log('------------------------------------------------------------------------------ End')
     }
 })(jQuery);
