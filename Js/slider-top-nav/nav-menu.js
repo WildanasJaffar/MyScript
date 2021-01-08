@@ -46,6 +46,7 @@ if (typeof jQuery === 'undefined') {
             }
 
             setTimeout(function () {
+                // get width from elem and its childrens
                 wrapper = $('#' + elem_id).outerWidth();
                 wrapper2 = wrapper / 2;
                 $ul = $('.' + settings.class_content).children('li');
@@ -55,23 +56,17 @@ if (typeof jQuery === 'undefined') {
                 $ul = $('.' + settings.class_content);
                 content += wrapper < content ? 50 : 0;
 
-                var enable_prev = calculate_margin('prev') != set_margin;
-                var enable_next = calculate_margin('next') != set_margin;
-                $('.' + settings.class_btn_prev + ', .' + settings.class_btn_next).addClass('disabled');
-                if (enable_prev) {
-                    $('.' + settings.class_btn_prev).removeClass('disabled');
-                }
-
-                if (enable_next) {
-                    $('.' + settings.class_btn_next).removeClass('disabled');
-                }
+                // enable button prev & next
+                enable_btn();
             }, 500);
         }
 
         function on_resize(e) {
             if ($(e).width() > 992) {
+                // something like initialize
                 calculate();
             } else {
+                // something like uninitialize
                 $('.' + settings.class_content + ' > li').removeClass('menu-item-open-dropdown').removeClass('menu-item-hover');
                 $('#' + elem_id + '> ul').removeAttr('style');
                 $('#' + elem_id).parent().children('.' + settings.class_btn_prev).hide();
@@ -84,18 +79,7 @@ if (typeof jQuery === 'undefined') {
         function next_prev_tab(type) {
             set_margin = calculate_margin(type);
             $ul.css({ 'margin-left': set_margin });
-
-            var enable_prev = calculate_margin('prev') != set_margin;
-            var enable_next = calculate_margin('next') != set_margin;
-
-            $('.' + settings.class_btn_prev + ', .' + settings.class_btn_next).addClass('disabled');
-            if (enable_prev) {
-                $('.' + settings.class_btn_prev).removeClass('disabled');
-            }
-
-            if (enable_next) {
-                $('.' + settings.class_btn_next).removeClass('disabled');
-            }
+            enable_btn();
         }
 
         function calculate_margin(type) {
@@ -117,16 +101,39 @@ if (typeof jQuery === 'undefined') {
             return temp;
         }
 
+        function enable_btn() {
+            var enable_prev = calculate_margin('prev') != set_margin;
+            var enable_next = calculate_margin('next') != set_margin;
+
+            $('.' + settings.class_btn_prev + ', .' + settings.class_btn_next).addClass('disabled');
+            if (enable_prev) {
+                $('.' + settings.class_btn_prev).removeClass('disabled');
+            }
+
+            if (enable_next) {
+                $('.' + settings.class_btn_next).removeClass('disabled');
+            }
+        }
+
         $(window).on('resize', function () { on_resize(this) });
         on_resize(window);
 
         $('.' + settings.class_content + ' > li').click(function () {
-            var position = $(this).position();
-            var $ch = $(this).children('div');
-            if ($ch.outerWidth() == 230 || wrapper2 > position.left) {
+            // set children position (*css: display: fixed)
+            var position = $(this).offset(); // get position our li
+            var width = $(this).outerWidth(); // get width our li
+            var $ch = $(this).children('div'); // our child elem
+
+            var width_parent = $('.' + settings.class_wrapper).parent().width(); // get width our parent
+            var width_child = $ch.outerWidth(); // get width our child
+
+            // width_child == 230 (basic width)
+            // wrapper2 > position.left ( divide our wrapper, and check our position is in range of wrapper2 )
+            // (width_child + position.left) < width_parent ( sum our width child with position li, and is in range of width_parent )
+            if (width_child == 230 || wrapper2 > position.left || (width_child + position.left) < width_parent) {
                 $ch.css({ left: 'auto' });
             } else {
-                $ch.css({ margin: '0 auto', left: 0, right: 0 });
+                $ch.css({ left: 'auto', right: $(window).width() - (position.left + width) });
             }
         });
 
@@ -137,5 +144,7 @@ if (typeof jQuery === 'undefined') {
         $('.' + settings.class_btn_next).click(function () {
             next_prev_tab('next');
         });
+
+        // console.log('Slider Top Nav development')
     }
 })(jQuery);
