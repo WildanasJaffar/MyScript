@@ -14,9 +14,10 @@ if (typeof jQuery === 'undefined') {
     'use strict';
 
     $.fn.SliderTopNav = function (opt) {
-        console.log('Slider Top Nav development')
-        console.log('------------------------------------------------------------------------------ Start')
+        // console.log('Slider Top Nav development')
+        // console.log('------------------------------------------------------------------------------ Start')
         var defaults = {
+            scroll: 300,
             class_wrapper: 'scroll-wrapper',
             class_content: 'scroll-nav',
             class_btn_prev: 'btn-prev-tab',
@@ -47,17 +48,16 @@ if (typeof jQuery === 'undefined') {
                 $('#' + elem_id).parent().children('.' + settings.class_btn_next).show();
             }
 
+            $ul = $('.' + settings.class_content);
             setTimeout(function () {
                 // get elem width and its children
                 wrapper = $('#' + elem_id).outerWidth();
                 wrapper2 = wrapper / 2;
-                $ul = $('.' + settings.class_content).children('li');
-                content = $.map($ul, function (e) {
+                var $li = $ul.children('li');
+                content = $.map($li, function (e) {
                     return $(e).outerWidth();
                 }).reduce(function (a, b) { return a + b; }, 0);
-                $ul = $('.' + settings.class_content);
                 content += wrapper < content ? 50 : 0;
-
                 // enable button prev & next
                 enable_btn();
             }, 500);
@@ -80,7 +80,8 @@ if (typeof jQuery === 'undefined') {
 
         function next_prev_tab(type) {
             set_margin = calculate_margin(type);
-            $ul.css({ 'margin-left': set_margin });
+            $ul.css({ marginLeft: set_margin });
+            current_margin = set_margin;
             enable_btn();
         }
 
@@ -88,15 +89,15 @@ if (typeof jQuery === 'undefined') {
             var temp = 0;
             if (type == 'next') {
                 if (-current_margin + wrapper < content) {
-                    temp = Math.max(current_margin - wrapper, -(content - wrapper));
+                    temp = -settings.scroll - -current_margin;
                 } else {
                     temp = current_margin;
                 }
             } else {
                 if (current_margin < 0) {
-                    temp = Math.min(current_margin + wrapper, 0);
+                    temp = settings.scroll - -current_margin;
                 } else {
-                    temp = current_margin;
+                    temp = 0;
                 }
             }
 
@@ -129,18 +130,23 @@ if (typeof jQuery === 'undefined') {
             var width_parent = $('.' + settings.class_wrapper).parent().width(); // get width our parent
             var width_child = $ch.outerWidth(); // get width our child
 
+            position.right = $(window).width() - (position.left + width);
+
             // width_child == 230 (basic width)
             // wrapper2 > position.left ( divide our wrapper, and check our position is in range of wrapper2 )
             // (width_child + position.left) < width_parent ( sum our width child with position li, and is in range of width_parent )
-            if (width_child == 230 || wrapper2 > position.left || (width_child + position.left) < width_parent) {
-                $ch.css({ left: 'auto' });
+            // $ch.removeAttr('style');
+            if (wrapper2 > position.left && position.left > 0 && (width_child + position.left) < width_parent && width_child <= 450) {
+                $ch.css({ left: position.left, right: '', margin: '' });
+            } else if (width_child + position.right < width_parent) {
+                $ch.css({ left: 'auto', right: position.right, margin: '' });
             } else {
-                $ch.css({ left: 'auto', right: $(window).width() - (position.left + width) });
+                $ch.css({ margin: '0 auto', left: 0, right: 0 });
             }
         });
 
         $('.' + settings.class_btn_prev).click(function () { next_prev_tab('prev'); });
         $('.' + settings.class_btn_next).click(function () { next_prev_tab('next'); });
-        console.log('------------------------------------------------------------------------------ End')
+        // console.log('------------------------------------------------------------------------------ End')
     }
 })(jQuery);
