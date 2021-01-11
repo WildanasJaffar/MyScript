@@ -124,6 +124,7 @@ if (typeof jQuery === 'undefined') {
         $('.' + settings.class_content + ' > li').click(function () {
             // set children position (*css: display: fixed)
             var position = $(this).offset(); // get position our li
+            var position_parent = $('#' + elem_id).offset(); // get position our grandpa
             var width = $(this).outerWidth(); // get width our li
             var $ch = $(this).children('div'); // our child elem
 
@@ -136,10 +137,10 @@ if (typeof jQuery === 'undefined') {
             // wrapper2 > position.left ( divide our wrapper, and check our position is in range of wrapper2 )
             // (width_child + position.left) < width_parent ( sum our width child with position li, and is in range of width_parent )
             // $ch.removeAttr('style');
-            if (wrapper2 > position.left && position.left > 0 && (width_child + position.left) < width_parent && width_child <= 450) {
-                $ch.css({ left: position.left, right: '', margin: '' });
+            if (wrapper2 > position.left && position.left > 0 && (width_child + position.left) < width_parent && position.left >= (position_parent.left - 50)) {
+                $ch.css({ left: position.left, right: '0', margin: '0' });
             } else if (width_child + position.right < width_parent) {
-                $ch.css({ left: 'auto', right: position.right, margin: '' });
+                $ch.css({ left: 'auto', right: position.right, margin: '0' });
             } else {
                 $ch.css({ margin: '0 auto', left: 0, right: 0 });
             }
