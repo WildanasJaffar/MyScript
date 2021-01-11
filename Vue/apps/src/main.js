@@ -1,8 +1,12 @@
+import '@babel/polyfill'
+import 'mutationobserver-shim'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from "./router"
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+// import 'bootstrap'
+// import "bootstrap/dist/css/bootstrap.min.css"
 import { isLoggedIn, setRestEndPoint, getRestEndPoint, logoutUser, getAuthToken, setAuthToken, getUserInfo } from './components/auth/auth'
 
 // import vuetify from './plugins/vuetify' // path to vuetify export
