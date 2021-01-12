@@ -91,15 +91,29 @@ if (typeof jQuery === 'undefined') {
                 if (-current_margin + wrapper < content) {
                     temp = -settings.scroll - -current_margin;
                 } else {
-                    temp = current_margin;
+                    temp = -settings.scroll - -current_margin;
+                    if (-temp + wrapper > content && -(content - (-current_margin + wrapper)) <= 100) {
+                        temp = -(settings.scroll / 2) - -current_margin;
+                    } else {
+                        temp = current_margin;
+                    }
                 }
             } else {
                 if (current_margin < 0) {
-                    temp = settings.scroll - -current_margin;
+                    if (settings.scroll - -current_margin > 0) {
+                        temp = 0;
+                    } else {
+                        temp = settings.scroll - -current_margin;
+                    }
                 } else {
                     temp = 0;
                 }
             }
+
+            // console.log("-current_margin: " + -current_margin)
+            // console.log("wrapper: " + wrapper)
+            // console.log("content: " + content)
+            // console.log("temp: " + temp)
 
             return temp;
         }
