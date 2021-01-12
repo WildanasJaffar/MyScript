@@ -8,6 +8,7 @@
 .scroll-wrapper {
 	width: 100%;
 	overflow: hidden !important;
+	margin-right: 5px;
 }
 
 .scroll-wrapper > ul {
