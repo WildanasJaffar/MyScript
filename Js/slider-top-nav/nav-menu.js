@@ -32,21 +32,14 @@ if (typeof jQuery === 'undefined') {
         var wrapper2 = 0;
         var current_margin = 0;
         var set_margin = 0;
+        var minus = 0;
 
         var $ul = '';
         var content = '';
         function calculate() {
             $('#' + elem_id).addClass(settings.class_wrapper);
             $('#' + elem_id + '> ul').addClass(settings.class_content);
-
-            var btn_prev = $('.' + settings.class_wrapper).parent().find('.' + settings.class_btn_prev);
-            if (btn_prev.length == 0) {
-                $('.' + settings.class_wrapper).parent().prepend(`<a class="btn btn-icon mr-2 mt-1 btn-transparent-white ` + settings.class_btn_prev + `">` + settings.icon_btn_prev + `</a>`);
-                $('.' + settings.class_wrapper).parent().append(`<a class="btn btn-icon mr-2 mt-1 btn-transparent-white ` + settings.class_btn_next + `">` + settings.icon_btn_next + `</a>`);
-            } else {
-                $('#' + elem_id).parent().children('.' + settings.class_btn_prev).show();
-                $('#' + elem_id).parent().children('.' + settings.class_btn_next).show();
-            }
+            minus = 0;
 
             $ul = $('.' + settings.class_content);
             setTimeout(function () {
@@ -57,14 +50,34 @@ if (typeof jQuery === 'undefined') {
                 content = $.map($li, function (e) {
                     return $(e).outerWidth();
                 }).reduce(function (a, b) { return a + b; }, 0);
-                content += wrapper < content ? 50 : 0;
+                // content += wrapper < content ? 50 : 0;
+
+                var width_parent = $('#' + elem_id).parent().outerWidth();
+                if (content > width_parent) {
+                    $('#' + elem_id).css({ width: '90%' });
+                    var btn_prev = $('.' + settings.class_wrapper).parent().find('.' + settings.class_btn_prev);
+                    if (btn_prev.length == 0) {
+                        $('.' + settings.class_wrapper).parent().prepend(`<a class="btn mr-2 mt-1 btn-transparent-white ` + settings.class_btn_prev + `">` + settings.icon_btn_prev + `</a>`);
+                        $('.' + settings.class_wrapper).parent().append(`<a class="btn mr-2 mt-1 btn-transparent-white ` + settings.class_btn_next + `">` + settings.icon_btn_next + `</a>`);
+                        $('.' + settings.class_btn_prev).click(function () { next_prev_tab('prev'); });
+                        $('.' + settings.class_btn_next).click(function () { next_prev_tab('next'); });
+                    } else {
+                        $('#' + elem_id).parent().children('.' + settings.class_btn_prev).show();
+                        $('#' + elem_id).parent().children('.' + settings.class_btn_next).show();
+                    }
+                } else {
+                    $('#' + elem_id).css({ width: '100%' });
+                    $('#' + elem_id).parent().children('.' + settings.class_btn_prev).hide();
+                    $('#' + elem_id).parent().children('.' + settings.class_btn_next).hide();
+                }
+
                 // enable button prev & next
                 enable_btn();
             }, 500);
         }
 
         function on_resize(e) {
-            if ($(e).width() > 992) {
+            if ($(e).width() >= 992) {
                 // something like initialize
                 calculate();
             } else {
@@ -73,15 +86,21 @@ if (typeof jQuery === 'undefined') {
                 $('#' + elem_id + '> ul').removeAttr('style');
                 $('#' + elem_id).parent().children('.' + settings.class_btn_prev).hide();
                 $('#' + elem_id).parent().children('.' + settings.class_btn_next).hide();
+                $('#' + elem_id).css({ width: '100%' });
                 $('#' + elem_id).removeClass(settings.class_wrapper);
                 $('#' + elem_id + '> ul').removeClass(settings.class_content);
             }
         }
 
         function next_prev_tab(type) {
-            set_margin = calculate_margin(type);
-            $ul.css({ marginLeft: set_margin });
-            current_margin = set_margin;
+            var $scroll_nav = $('.' + settings.class_content);
+            var scrollLeft = $scroll_nav.scrollLeft();
+            if (type == 'next') {
+                $scroll_nav.animate({ scrollLeft: scrollLeft + settings.scroll }, 300);
+            } else {
+                $scroll_nav.animate({ scrollLeft: scrollLeft - settings.scroll }, 300);
+            }
+
             enable_btn();
         }
 
@@ -119,8 +138,12 @@ if (typeof jQuery === 'undefined') {
         }
 
         function enable_btn() {
-            var enable_prev = calculate_margin('prev') != set_margin;
-            var enable_next = calculate_margin('next') != set_margin;
+            var $scroll_nav = $('.' + settings.class_content);
+            var scrollLeft = Math.ceil($scroll_nav.scrollLeft());
+            var scroll = $scroll_nav.get(0);
+            var maxScrollLeft = scroll.scrollWidth - scroll.clientWidth;
+            var enable_prev = scrollLeft > 0;
+            var enable_next = scrollLeft < maxScrollLeft;
 
             $('.' + settings.class_btn_prev + ', .' + settings.class_btn_next).addClass('disabled');
             if (enable_prev) {
@@ -136,7 +159,13 @@ if (typeof jQuery === 'undefined') {
         on_resize(window);
 
         $('.' + settings.class_content + ' > li').click(function () {
-            // set children position (*css: display: fixed)
+            if (minus == 0) {
+                var postition_first_li = $('.' + settings.class_content).children().offset();
+                minus = postition_first_li.left;
+                minus = minus < 0 ? minus * -1 : minus;
+            }
+
+            // set children position
             var position = $(this).offset(); // get position our li
             var position_parent = $('#' + elem_id).offset(); // get position our grandpa
             var width = $(this).outerWidth(); // get width our li
@@ -145,6 +174,7 @@ if (typeof jQuery === 'undefined') {
             var width_parent = $('.' + settings.class_wrapper).parent().width(); // get width our parent
             var width_child = $ch.outerWidth(); // get width our child
 
+            position.left = position.left;
             position.right = $(window).width() - (position.left + width);
 
             // width_child == 230 (basic width)
@@ -152,16 +182,19 @@ if (typeof jQuery === 'undefined') {
             // (width_child + position.left) < width_parent ( sum our width child with position li, and is in range of width_parent )
             // $ch.removeAttr('style');
             if (wrapper2 > position.left && position.left > 0 && (width_child + position.left) < width_parent && position.left >= (position_parent.left - 50)) {
-                $ch.css({ left: position.left, right: '0', margin: '0' });
+                console.log(position)
+                $ch.css({ left: position.left - minus, right: '0', margin: '0' });
             } else if (width_child + position.right < width_parent) {
-                $ch.css({ left: 'auto', right: position.right, margin: '0' });
+                $ch.css({ left: 'auto', right: position.right - minus, margin: '0' });
             } else {
                 $ch.css({ margin: '0 auto', left: 0, right: 0 });
             }
         });
 
-        $('.' + settings.class_btn_prev).click(function () { next_prev_tab('prev'); });
-        $('.' + settings.class_btn_next).click(function () { next_prev_tab('next'); });
+        $('.' + settings.class_content).on('scroll', function () {
+            enable_btn();
+        });
+
         // console.log('------------------------------------------------------------------------------ End')
     }
 })(jQuery);
