@@ -77,7 +77,6 @@ if (typeof jQuery === 'undefined') {
                     var postition_first_li = $('.' + settings.class_content).children().offset();
                     minus = postition_first_li.left;
                     minus = minus < 0 ? minus * -1 : minus;
-                    console.log(postition_first_li)
                 }
             }, 500);
         }
@@ -182,7 +181,7 @@ if (typeof jQuery === 'undefined') {
             // (width_child + position.left) < width_parent ( sum our width child with position li, and is in range of width_parent )
             // $ch.removeAttr('style');
             if (wrapper2 > position.left && position.left > 0 && (width_child + position.left) < width_parent && position.left >= (position_parent.left - 50)) {
-                console.log(position)
+                // console.log(position)
                 $ch.css({ left: position.left - minus, right: '0', margin: '0' });
             } else if (width_child + position.right < width_parent) {
                 $ch.css({ left: 'auto', right: position.right - minus, margin: '0' });
