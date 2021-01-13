@@ -39,7 +39,6 @@ if (typeof jQuery === 'undefined') {
         function calculate() {
             $('#' + elem_id).addClass(settings.class_wrapper);
             $('#' + elem_id + '> ul').addClass(settings.class_content);
-            minus = 0;
 
             $ul = $('.' + settings.class_content);
             setTimeout(function () {
@@ -73,6 +72,13 @@ if (typeof jQuery === 'undefined') {
 
                 // enable button prev & next
                 enable_btn();
+
+                if (minus == 0) {
+                    var postition_first_li = $('.' + settings.class_content).children().offset();
+                    minus = postition_first_li.left;
+                    minus = minus < 0 ? minus * -1 : minus;
+                    console.log(postition_first_li)
+                }
             }, 500);
         }
 
@@ -159,12 +165,6 @@ if (typeof jQuery === 'undefined') {
         on_resize(window);
 
         $('.' + settings.class_content + ' > li').click(function () {
-            if (minus == 0) {
-                var postition_first_li = $('.' + settings.class_content).children().offset();
-                minus = postition_first_li.left;
-                minus = minus < 0 ? minus * -1 : minus;
-            }
-
             // set children position
             var position = $(this).offset(); // get position our li
             var position_parent = $('#' + elem_id).offset(); // get position our grandpa
