@@ -24,6 +24,8 @@ if (typeof jQuery === 'undefined') {
             class_btn_next: 'btn-next-tab',
             icon_btn_prev: '<i class="fas fa-angle-left"></i>',
             icon_btn_next: '<i class="fas fa-angle-right"></i>',
+
+            // opt for hide the scrollbar
             on_opera: '',
             on_firefox: '',
             on_chrome: '',
@@ -86,6 +88,7 @@ if (typeof jQuery === 'undefined') {
                 // enable button prev & next
                 enable_btn();
 
+                // idk our children always out of range its position, sometime 100px more than normal :(
                 if (minus == 0) {
                     var postition_first_li = $('.' + settings.class_content).children().offset();
                     minus = postition_first_li.left;
@@ -98,9 +101,9 @@ if (typeof jQuery === 'undefined') {
             if ($(e).width() >= 992) {
                 // something like initialize
                 calculate();
-                console.log($(e).width())
             } else {
                 // something like uninitialize
+                minus = 0;
                 $('.' + settings.class_content + ' > li').removeClass('menu-item-open-dropdown').removeClass('menu-item-hover');
                 $('#' + elem_id + '> ul').removeAttr('style');
                 $('#' + elem_id).parent().children('.' + settings.class_btn_prev).hide();
@@ -201,6 +204,7 @@ if (typeof jQuery === 'undefined') {
             enable_btn();
         });
 
+        // let hide the scroll bar if you set it :D
         // Opera 8.0+
         if (settings.on_opera == 'hidden') {
             var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
