@@ -23,7 +23,12 @@ if (typeof jQuery === 'undefined') {
             class_btn_prev: 'btn-prev-tab',
             class_btn_next: 'btn-next-tab',
             icon_btn_prev: '<i class="fas fa-angle-left"></i>',
-            icon_btn_next: '<i class="fas fa-angle-right"></i>'
+            icon_btn_next: '<i class="fas fa-angle-right"></i>',
+            on_opera: '',
+            on_firefox: '',
+            on_chrome: '',
+            on_safari: '',
+            on_edge: ''
         };
 
         var settings = $.extend(true, defaults, opt);
@@ -58,8 +63,16 @@ if (typeof jQuery === 'undefined') {
                     if (btn_prev.length == 0) {
                         $('.' + settings.class_wrapper).parent().prepend(`<a class="btn mr-2 mt-1 btn-transparent-white ` + settings.class_btn_prev + `">` + settings.icon_btn_prev + `</a>`);
                         $('.' + settings.class_wrapper).parent().append(`<a class="btn mr-2 mt-1 btn-transparent-white ` + settings.class_btn_next + `">` + settings.icon_btn_next + `</a>`);
-                        $('.' + settings.class_btn_prev).click(function () { next_prev_tab('prev'); });
-                        $('.' + settings.class_btn_next).click(function () { next_prev_tab('next'); });
+                        $('.' + settings.class_btn_prev).click(function (e) {
+                            e.preventDefault();
+                            next_prev_tab('prev');
+                            return false;
+                        });
+                        $('.' + settings.class_btn_next).click(function (e) {
+                            e.preventDefault();
+                            next_prev_tab('next');
+                            return false;
+                        });
                     } else {
                         $('#' + elem_id).parent().children('.' + settings.class_btn_prev).show();
                         $('#' + elem_id).parent().children('.' + settings.class_btn_next).show();
@@ -85,6 +98,7 @@ if (typeof jQuery === 'undefined') {
             if ($(e).width() >= 992) {
                 // something like initialize
                 calculate();
+                console.log($(e).width())
             } else {
                 // something like uninitialize
                 $('.' + settings.class_content + ' > li').removeClass('menu-item-open-dropdown').removeClass('menu-item-hover');
@@ -98,14 +112,7 @@ if (typeof jQuery === 'undefined') {
         }
 
         function next_prev_tab(type) {
-            var $scroll_nav = $('.' + settings.class_content);
-            var scrollLeft = $scroll_nav.scrollLeft();
-            if (type == 'next') {
-                $scroll_nav.animate({ scrollLeft: scrollLeft + settings.scroll }, 300);
-            } else {
-                $scroll_nav.animate({ scrollLeft: scrollLeft - settings.scroll }, 300);
-            }
-
+            $('.' + settings.class_content).stop(true, true).animate({ scrollLeft: (type == 'next' ? "+=" : "-=") + (settings.scroll * 2) }, 600);
             enable_btn();
         }
 
@@ -193,6 +200,49 @@ if (typeof jQuery === 'undefined') {
         $('.' + settings.class_content).on('scroll', function () {
             enable_btn();
         });
+
+        // Opera 8.0+
+        if (settings.on_opera == 'hidden') {
+            var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+            if (isOpera) {
+                $('.scroll-wrapper > .scroll-nav').css({ 'overflow-x': 'hidden' })
+            }
+        }
+
+        // Firefox 1.0+
+        if (settings.on_firefox == 'hidden') {
+            var isFirefox = typeof InstallTrigger !== 'undefined';
+            if (isFirefox) {
+                $('.scroll-wrapper > .scroll-nav').css({ 'overflow-x': 'hidden' })
+            }
+        }
+
+        // Chrome 1 - 71
+        if (settings.on_chrome == 'hidden') {
+            var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+            if (isChrome) {
+                $('.scroll-wrapper > .scroll-nav').css({ 'overflow-x': 'hidden' })
+            }
+        }
+
+        // Safari 3.0+ "[object HTMLElementConstructor]" 
+        if (settings.on_safari == 'hidden') {
+            var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+            if (isSafari) {
+                $('.scroll-wrapper > .scroll-nav').css({ 'overflow-x': 'hidden' })
+            }
+        }
+
+        // Edge 20+
+        if (settings.on_edge == 'hidden') {
+            // Internet Explorer 6-11
+            var isIE = /*@cc_on!@*/false || !!document.documentMode;
+
+            var isEdge = !isIE && !!window.StyleMedia;
+            if (isEdge) {
+                $('.scroll-wrapper > .scroll-nav').css({ 'overflow-x': 'hidden' })
+            }
+        }
 
         // console.log('------------------------------------------------------------------------------ End')
     }
