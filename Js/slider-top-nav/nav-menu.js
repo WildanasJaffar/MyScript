@@ -20,10 +20,11 @@ if (typeof jQuery === 'undefined') {
             scroll: 300,
             class_wrapper: 'scroll-wrapper',
             class_content: 'scroll-nav',
+            class_btn: 'btn-scroll',
             class_btn_prev: 'btn-prev-tab',
             class_btn_next: 'btn-next-tab',
-            icon_btn_prev: '<i class="fas fa-angle-left"></i>',
-            icon_btn_next: '<i class="fas fa-angle-right"></i>',
+            icon_btn_prev: '<i class="la la-angle-left"></i>',
+            icon_btn_next: '<i class="la la-angle-right"></i>',
 
             // opt for hide the scrollbar
             on_opera: '',
@@ -63,26 +64,17 @@ if (typeof jQuery === 'undefined') {
                     $('#' + elem_id).css({ width: '90%' });
                     var btn_prev = $('.' + settings.class_wrapper).parent().find('.' + settings.class_btn_prev);
                     if (btn_prev.length == 0) {
-                        $('.' + settings.class_wrapper).parent().prepend(`<a class="btn mr-2 mt-1 btn-transparent-white ` + settings.class_btn_prev + `">` + settings.icon_btn_prev + `</a>`);
-                        $('.' + settings.class_wrapper).parent().append(`<a class="btn mr-2 mt-1 btn-transparent-white ` + settings.class_btn_next + `">` + settings.icon_btn_next + `</a>`);
-                        $('.' + settings.class_btn_prev).click(function (e) {
-                            e.preventDefault();
-                            next_prev_tab('prev');
-                            return false;
-                        });
-                        $('.' + settings.class_btn_next).click(function (e) {
-                            e.preventDefault();
-                            next_prev_tab('next');
-                            return false;
-                        });
+                        $('.' + settings.class_wrapper).parent().prepend(`<a class="btn mr-2 mt-1 btn-transparent-white ` + settings.class_btn + ' ' + settings.class_btn_prev + `">` + settings.icon_btn_prev + `</a>`);
+                        $('.' + settings.class_wrapper).parent().append(`<a class="btn mr-2 mt-1 btn-transparent-white ` + settings.class_btn + ' ' + settings.class_btn_next + `">` + settings.icon_btn_next + `</a>`);
+                        $('.' + settings.class_btn_prev).click(function () { next_prev_tab('prev'); });
+                        $('.' + settings.class_btn_next).click(function () { next_prev_tab('next'); });
                     } else {
-                        $('#' + elem_id).parent().children('.' + settings.class_btn_prev).show();
-                        $('#' + elem_id).parent().children('.' + settings.class_btn_next).show();
+                        $('#' + elem_id).parent().children('.' + settings.class_btn).show();
                     }
                 } else {
                     $('#' + elem_id).css({ width: '100%' });
-                    $('#' + elem_id).parent().children('.' + settings.class_btn_prev).hide();
-                    $('#' + elem_id).parent().children('.' + settings.class_btn_next).hide();
+                    $('#' + elem_id).parent().children('.' + settings.class_btn).hide();
+                    minus = 0;
                 }
 
                 // enable button prev & next
@@ -106,8 +98,7 @@ if (typeof jQuery === 'undefined') {
                 minus = 0;
                 $('.' + settings.class_content + ' > li').removeClass('menu-item-open-dropdown').removeClass('menu-item-hover');
                 $('#' + elem_id + '> ul').removeAttr('style');
-                $('#' + elem_id).parent().children('.' + settings.class_btn_prev).hide();
-                $('#' + elem_id).parent().children('.' + settings.class_btn_next).hide();
+                $('#' + elem_id).parent().children('.' + settings.class_btn).hide();
                 $('#' + elem_id).css({ width: '100%' });
                 $('#' + elem_id).removeClass(settings.class_wrapper);
                 $('#' + elem_id + '> ul').removeClass(settings.class_content);
