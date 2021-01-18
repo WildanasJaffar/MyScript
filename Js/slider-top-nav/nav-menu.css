@@ -60,6 +60,6 @@
 }
 
 /* btn */
-.btn-prev-tab, .btn-next-tab{
+.btn-prev-tab, .btn-next-tab {
 	height: calc(1.5em + 1.3rem + 2px);
 }
