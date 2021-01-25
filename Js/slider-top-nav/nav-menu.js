@@ -191,10 +191,6 @@ if (typeof jQuery === 'undefined') {
             }
         });
 
-        $('.' + settings.class_content + ' > li').on("contextmenu", function () {
-            return false;
-        });
-
         $('.' + settings.class_content).on('scroll', function () {
             enable_btn();
         });
